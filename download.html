@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 18px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 10px;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .continue-btn-red {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .continue-btn-red:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(245, 87, 108, 0.4);
+        }
+
+        .continue-btn-green {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .continue-btn-green:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 172, 254, 0.4);
+        }
+
+        .continue-btn-single {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+        }
+
+        .continue-btn-single:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(250, 112, 154, 0.4);
+        }
+
+        .timer {
+            font-size: 48px;
+            color: #667eea;
+            font-weight: bold;
+            margin: 30px 0;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .info-text {
+            color: #666;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Download Your File</h1>
+        
+        <div id="downloadSection">
+            <button class="btn download-btn" id="downloadBtn">Download Now</button>
+            <p class="info-text">Click the button to start download</p>
+        </div>
+
+        <div id="timerSection" class="hidden">
+            <p class="info-text">Please wait...</p>
+            <div class="timer" id="timer">5</div>
+        </div>
+
+        <div id="twoContinueSection" class="hidden">
+            <p class="info-text">Choose any button to continue</p>
+            <div class="button-container">
+                <button class="btn continue-btn-red" id="continueRedBtn">Continue</button>
+                <button class="btn continue-btn-green" id="continueGreenBtn">Continue</button>
+            </div>
+        </div>
+
+        <div id="timer15Section" class="hidden">
+            <p class="info-text">Please wait...</p>
+            <div class="timer" id="timer15">15</div>
+        </div>
+
+        <div id="singleContinueSection" class="hidden">
+            <p class="info-text">Click to continue</p>
+            <div class="button-container">
+                <button class="btn continue-btn-single" id="singleContinueBtn">Continue</button>
+            </div>
+        </div>
+
+        <div id="timer5Section" class="hidden">
+            <p class="info-text">Almost there...</p>
+            <div class="timer" id="timer5">5</div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // EDIT YOUR EXTERNAL LINKS HERE
+        // ============================================
+        const link1 = 'https://otieu.com/4/9677690';  // External Link 1
+        const link2 = 'https://www.youtube.com/results?search_query=prime+panel';   // External Link 2
+        // ============================================
+
+        // State management
+        let downloadClicks = 0;
+        let twoContinueClicks = 0;
+        let singleContinueClicks = 0;
+
+        // Get all buttons
+        const downloadBtn = document.getElementById('downloadBtn');
+        const continueRedBtn = document.getElementById('continueRedBtn');
+        const continueGreenBtn = document.getElementById('continueGreenBtn');
+        const singleContinueBtn = document.getElementById('singleContinueBtn');
+
+        // Download button click handler
+        downloadBtn.addEventListener('click', function() {
+            downloadClicks++;
+            console.log('Download clicked:', downloadClicks);
+            
+            // Open link1
+            window.open(link1, '_blank');
+            
+            if (downloadClicks === 3) {
+                // After 3rd click, start 5 second timer
+                document.getElementById('downloadSection').classList.add('hidden');
+                document.getElementById('timerSection').classList.remove('hidden');
+                startTimer(5, 'timer', showTwoContinueButtons);
+            }
+        });
+
+        // Two continue buttons click handlers
+        continueRedBtn.addEventListener('click', handleTwoContinueClick);
+        continueGreenBtn.addEventListener('click', handleTwoContinueClick);
+
+        function handleTwoContinueClick() {
+            twoContinueClicks++;
+            console.log('Two Continue clicked:', twoContinueClicks);
+            
+            // Open link1
+            window.open(link1, '_blank');
+            
+            if (twoContinueClicks === 3) {
+                // After 3rd click, start 15 second timer
+                document.getElementById('twoContinueSection').classList.add('hidden');
+                document.getElementById('timer15Section').classList.remove('hidden');
+                startTimer(15, 'timer15', showSingleContinueSection);
+            }
+        }
+
+        // Single continue button click handler
+        singleContinueBtn.addEventListener('click', function() {
+            singleContinueClicks++;
+            console.log('Single Continue clicked:', singleContinueClicks);
+            
+            if (singleContinueClicks === 1) {
+                // First click - open link1
+                window.open(link1, '_blank');
+                
+                // Start 5 second timer
+                document.getElementById('singleContinueSection').classList.add('hidden');
+                document.getElementById('timer5Section').classList.remove('hidden');
+                startTimer(5, 'timer5', function() {
+                    document.getElementById('timer5Section').classList.add('hidden');
+                    document.getElementById('singleContinueSection').classList.remove('hidden');
+                });
+            } else if (singleContinueClicks === 2) {
+                // Second click - open link2
+                window.open(link2, '_blank');
+                
+                // Show completion message
+                document.getElementById('singleContinueSection').innerHTML = `
+                    <p class="info-text" style="color: #4caf50; font-size: 18px; font-weight: bold;">
+                        ✓ Download Complete!
+                    </p>
+                    <p class="info-text">Refresh the page to restart</p>
+                `;
+            }
+        });
+
+        // Timer function
+        function startTimer(seconds, elementId, callback) {
+            let timeLeft = seconds;
+            const timerElement = document.getElementById(elementId);
+            timerElement.textContent = timeLeft;
+            
+            const countdown = setInterval(function() {
+                timeLeft--;
+                timerElement.textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    callback();
+                }
+            }, 1000);
+        }
+
+        // Show two continue buttons
+        function showTwoContinueButtons() {
+            document.getElementById('timerSection').classList.add('hidden');
+            document.getElementById('twoContinueSection').classList.remove('hidden');
+        }
+
+        // Show single continue section
+        function showSingleContinueSection() {
+            document.getElementById('timer15Section').classList.add('hidden');
+            document.getElementById('singleContinueSection').classList.remove('hidden');
+        }
+
+        console.log('Page loaded successfully!');
+    </script>
+</body>
+</html>
